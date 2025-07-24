@@ -105,7 +105,7 @@ type alias Flags =
 init : Flags -> ( Model, List Effect )
 init f =
     ( { now = Nothing
-      , hideFooter = False
+      , hideFooter = True
       , hideFooterCounter = 0
       , showHelp = False
       , highDensity = f.searchType == Routes.HighDensity
@@ -133,6 +133,7 @@ init f =
       , scrollTop = 0
       , pipelineJobs = Dict.empty
       , effectsToRetry = []
+      , maintenanceMessage = Just "🚧 Scheduled maintenance: The system will be down for maintenance on Sunday from 2:00 AM to 4:00 AM EST."
       }
     , [ FetchAllTeams
       , PinTeamNames Message.Effects.stickyHeaderConfig
@@ -828,6 +829,9 @@ updateBody session msg ( model, effects ) =
 
         Scrolled scrollState ->
             ( { model | scrollTop = scrollState.scrollTop }, effects )
+
+        DismissMaintenanceMessage ->
+            ( { model | maintenanceMessage = Nothing }, effects )
 
         _ ->
             ( model, effects )

@@ -73,6 +73,7 @@ type alias FooterModel r =
         , highDensity : Bool
         , dashboardView : Routes.DashboardView
         , query : String
+        , maintenanceMessage : Maybe String
     }
 
 

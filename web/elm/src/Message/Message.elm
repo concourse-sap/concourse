@@ -46,6 +46,7 @@ type Message
     | Click DomID
     | GoToRoute Routes.Route
     | Scrolled StrictEvents.ScrollState
+    | DismissMaintenanceMessage
     | NoOp
 
 

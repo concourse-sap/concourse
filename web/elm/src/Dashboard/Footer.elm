@@ -86,11 +86,18 @@ view session model =
         keyboardHelp
 
     else if not model.hideFooter then
-        infoBar session model
+        Html.div []
+            [ case model.maintenanceMessage of
+                Just message ->
+                    maintenanceBar message
+
+                Nothing ->
+                    Html.text ""
+            , infoBar session model
+            ]
 
     else
         Html.text ""
-
 
 keyboardHelp : Html Message
 keyboardHelp =
@@ -183,6 +190,40 @@ legend session model =
                             ++ [ toggleView model ]
                    )
 
+
+maintenanceBar : String -> Html Message
+maintenanceBar message =
+    Html.div
+        [ class "maintenance-modal", id "maintenance-modal" ]
+        [ Html.div
+            [ class "maintenance-modal-overlay" ]
+            []
+        , Html.div
+            [ class "maintenance-modal-content" ]
+            [ Html.div
+                [ class "maintenance-modal-header" ]
+                [ Html.div
+                    [ class "maintenance-icon" ]
+                    [ Html.text "⚠️" ]
+                , Html.h3
+                    [ class "maintenance-title" ]
+                    [ Html.text "Maintenance Notice" ]
+                , Html.button
+                    [ class "maintenance-close-btn"
+                    , id "maintenance-close-btn"
+                    , Html.Events.onClick DismissMaintenanceMessage
+                    , attribute "aria-label" "Close maintenance message"
+                    ]
+                    [ Html.text "×" ]
+                ]
+            , Html.div
+                [ class "maintenance-modal-body" ]
+                [ Html.p
+                    [ class "maintenance-text" ]
+                    [ Html.text message ]
+                ]
+            ]
+        ]
 
 concourseInfo :
     { a | hovered : HoverState.HoverState, version : String }
